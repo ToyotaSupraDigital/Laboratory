@@ -1,0 +1,25 @@
+#include "header.h"
+
+int main()
+{
+    int task;
+    int restart = 1;
+    void (*labtask)() = NULL;
+    while (restart)
+    {
+        choiceOfTask(&task);
+        if (task == 1)
+        {
+            labtask = task1;
+            labtask();
+        }
+        if (task == 2)
+        {
+            labtask = task2;
+            labtask();
+        }
+        printf("Do you want to restart programm?\n(Press Enter to Restart/Press any other button to Close)\n");
+        reset(&restart);
+    }
+    return 0;
+}

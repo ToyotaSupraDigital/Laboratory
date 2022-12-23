@@ -1,0 +1,24 @@
+#ifndef Functions_H
+#define Functions_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <time.h>
+void task1();
+void task2();
+void reset(int* reset);
+void choiceOfTask(int* choice);
+//void getStr(char** string, int length);
+//void printString(char** str);
+//int ifNum(char s);
+//void findCountOfNum(char* s, int* cnt);
+//void findKNum(char* s, int k, int* ind);
+//int charToInt(const char* s, int posOfStart);
+//int getNumOfStr(char** str, int posOfNum);
+//void move(char** str, int length, int k);
+//void inputLength(char** s, int* length);
+//void inputNum(int* num, int border);
+void getStr(char** string, int length);
+void printString(char** str);
+#endif

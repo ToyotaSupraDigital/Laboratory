@@ -1,0 +1,67 @@
+#include "header.h"
+void copyArr(char** resouce, char** result, int howManyStrings)
+{
+    for (int i = 0; i < howManyStrings; i++)
+        for (int j = 0; j < inputLength(resouce, i); j++)
+            *(*(result + i) + j) = *(*(resouce + i) + j);
+}
+void printArr(char** arr, int howManyStrings)
+{
+    for (int i = 0; i < howManyStrings; i++)
+        printf("%s\n", *(arr + i));
+}
+void del1stString(char** arr, int howManyStrings)
+{
+    for (int i = 0; i < howManyStrings - 1; i++)
+        *(arr + i) = *(arr + i + 1);
+}
+int inputLength(char** s, int posOfString)
+{
+    int cnt = 0, i = 0;
+    while (*(*(s + posOfString) + i) != '\0')
+    {
+        cnt++;
+        i++;
+    }
+    return cnt + 1;
+}
+void mergeSort(char** arr, int first, int last)
+{
+    if (first < last)
+    {
+        mergeSort(arr, first, (first + last) / 2);
+        mergeSort(arr, (first + last) / 2 + 1, last);
+        int middle, start, end, j;
+        //int* mas = new int[100];
+        char** tmp = (char**)malloc((last) * sizeof(char*));
+        middle = (first + last) / 2;
+        start = first;
+        end = middle + 1;
+        for (j = first; j <= last; j++)
+            if ((start <= middle) && ((end > last) || (inputLength(arr, start) > inputLength(arr, end))))
+            {
+                *(tmp + j) = *(arr + start);
+                start++;
+            }
+            else
+            {
+                *(tmp + j) = *(arr + end);
+                end++;
+            }
+        for (j = first; j <= last; j++)
+            *(arr + j) = *(tmp + j);
+    }
+};
+void reset(int* reset)
+{
+    char enter = _getch();
+    //while (scanf_s("%c", &enter) != 1)
+    //{
+    //    printf("Error! Try again\n");
+    //    rewind(stdin);
+    //}
+    if (enter == '\n')
+        *reset = 1;
+    else
+        *reset = 0;
+}

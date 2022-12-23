@@ -1,0 +1,210 @@
+#include "header.h"
+void choiceOfTask(int* task)
+{
+    printf("Which task would you wnat to start/restart? (1st task - 1, 2nd task - 2): \t");
+    while (scanf_s("%d", task) != 1 || *task != 1 && *task != 2 || getchar() != '\n')
+    {
+        printf("Error! Try again.\n");
+        rewind(stdin);
+    }
+}
+void inputLength(int* length)
+{
+    while (scanf_s("%d", length) != 1 || *length < 1 || *length > 100000 || getchar() != '\n')
+    {
+        printf("Error! Try again\n");
+        rewind(stdin);
+    }
+}
+void inputArr_p(int* parr, int length)
+{
+    srand(time(NULL));
+    printf("\nSelect input method (1-Keyboard/2-Random): ");
+    int way;
+    while (scanf_s("%d", &way) != 1 || way != 1 && way != 2 || getchar() != '\n')
+    {
+        printf("\nError! Try again\n");
+        rewind(stdin);
+    }
+    if (way == 1)
+        for (int i = 0; i < length; i++)
+        {
+            printf("\nInput %d-th element: ", i + 1);
+            while (scanf_s("%d", parr + i) != 1 || getchar() != '\n')
+            {
+                printf("\nError! Try again\n");
+                rewind(stdin);
+            }
+        }
+    else
+        for (int i = 0; i < length; i++)
+            *(parr + i) = rand() % 20000 - 10000;
+}
+void worstcase(int* parr, int length)
+{
+    parr[length] = 0;
+    for (int i = length - 1; i >= 0; i--)
+        parr[i] = parr[i + 1] + 1;
+}
+void printArr_p(int* parr, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        if (i % 10 == 0)
+            printf("\n");
+        printf("%d\t", *(parr + i));
+    }
+    printf("\n");
+}
+void findInd(int* parr, int length, int* ind)
+{
+    for (int i = 0; i < length; i++)
+        if (*(parr + i) > -1)
+        {
+            *ind = i;
+            break;
+        }
+}
+void copyArr(int* adress, int* letter, int length)
+{
+    for (int i = 0; i < length; i++)
+        *(adress + i) = *(letter + i);
+}
+void sortShell(int* parr, int length, int indFirstPositive)
+{
+    int count = length / 3;
+    int i, j, step;
+    int tmp;
+    for (step = (length - indFirstPositive) / 2; step > 0; step /= 2)
+        for (i = indFirstPositive + 1 + step; i < length; i++)
+        {
+            tmp = parr[i];
+            for (j = i; j >= step + 1 + indFirstPositive; j -= step)
+                if (tmp < parr[j - step])
+                    parr[j] = parr[j - step];
+                else
+                    break;
+            parr[j] = tmp;
+        }
+}
+void sortBubble(int* parr, int length, int indFirstPositive)
+{
+    int tmp, noSwap;
+    for (int i = length - 1; i > indFirstPositive; i--)
+    {
+        noSwap = 1;
+        for (int j = indFirstPositive + 1; j < i; j++)
+            if (parr[j] > parr[j + 1])
+            {
+                tmp = parr[j];
+                parr[j] = parr[j + 1];
+                parr[j + 1] = tmp;
+                noSwap = 0;
+            }
+        if (noSwap == 1)
+            break;
+    }
+}
+void reset(int* reset)
+{
+    char enter=_getch();
+    //while (scanf_s("%c", &enter) != 1)
+    //{
+    //    printf("Error! Try again\n");
+    //    rewind(stdin);
+    //}
+    if (enter == '\n')
+        *reset = 1;
+    else
+        *reset = 0;
+}
+/////////////////////////////
+void inputArr_pp(int** parr, int str, int col)
+{
+    srand(time(NULL));
+    printf("\nSelect input method (1-Keyboard/2-Random): \n");
+    int way;
+    while (scanf_s("%d", &way) != 1 || way != 1 && way != 2 || getchar() != '\n')
+    {
+        printf("Error! Try again\n");
+        rewind(stdin);
+    }
+    if (way == 1)
+        for (int i = 0; i < str; i++)
+            for (int j = 0; j < col; j++)
+            {
+                printf("Input String %d, Column %d:\t", i + 1, j + 1);
+                while (scanf_s("%d", *(parr + i) + j) != 1 || getchar() != '\n')
+                {
+                    printf("Error! Try again\n");
+                    rewind(stdin);
+                }
+                printf("\n");
+            }
+    else
+        for (int i = 0; i < str; i++)
+            for (int j = 0; j < col; j++)
+                *(*(parr + i) + j) = rand() % 20 - 10;
+}
+void printArr_pp(int** parr, int str, int col)
+{
+    for (int i = 0; i < str; i++)
+        for (int j = 0; j < col; j++)
+        {
+            if (j % 10 == 0)
+                printf("\n");
+            printf("%d\t", *(*(parr + i) + j));
+        }
+    printf("\n");
+}
+int productOfNegativeElements(int** arr, int numOfString, int lengthOfString)
+{
+    int flag = 0;
+    int prod = 1;
+    for (int i = 0; i < lengthOfString; i++)
+        if (*(*(arr + numOfString) + i) < 0)
+        {
+            flag = 1;
+            prod *= *(*(arr + numOfString) + i);
+        }
+    if (flag == 0)
+        return 0;
+    return prod;
+}
+void mergeSort(int** arr, int left, int right, int lengthOfString)
+{
+    if (left == right) return;
+    int mid = (left + right) / 2;
+    mergeSort(arr, left, mid, lengthOfString);
+    mergeSort(arr, mid + 1, right, lengthOfString);
+    int i = left;
+    int j = mid + 1;
+    int** tmp = (int**)malloc(right * sizeof(int*));
+    for (int step = 0; step < right - left + 1; step++)
+        if ((j > right) || ((i <= mid) && (productOfNegativeElements(arr, i, lengthOfString) <
+            productOfNegativeElements(arr, j, lengthOfString))))
+        {
+            *(tmp + step) = *(arr + i);
+            i++;
+        }
+        else
+        {
+            *(tmp + step) = *(arr + j);
+            j++;
+        }
+    for (int step = 0; step < right - left + 1; step++)
+        *(arr + left + step) = *(tmp + step);
+}
+void printMultiplication(int** arr, int str, int col)
+{
+    for (int i = 0; i < str; i++)
+        printf("Multiplication of Numbers in String %d equals: %d.\n", i + 1, productOfNegativeElements(arr, i, col));
+}
+/*void reset(int* reset)
+{
+    while (scanf_s("%d", reset) != 1 || *reset != 1 && *reset != 0 || getchar() != '\n')
+    {
+        printf("Error! Try again\n");
+        rewind(stdin);
+    }
+}*/

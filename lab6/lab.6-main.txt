@@ -1,0 +1,97 @@
+#include "header.h"
+
+int main()
+{
+    int restart = 1;
+    int* parr_1 = (int*)malloc(sizeof(int));
+    int* parr_2 = (int*)malloc(sizeof(int));
+    int choice;
+    while (restart)
+    {
+        choiceOfTask(&choice);
+        if (choice == 1)
+        {
+            while (restart)
+            {
+                clock_t start, end;
+                printf("How many numbers do you want to Sort?\n");
+                int length;
+                inputLength(&length);
+                parr_1 = (int*)realloc(parr_1, length * sizeof(int));
+                printf("Do you want to try the Worst Case?\n(Press Enter to try the Worst Case/Press any other button to Continue): ");
+                reset(&choice);
+                if (choice)
+                    worstcase(parr_1, length);
+                else
+                    inputArr_p(parr_1, length);
+                parr_2 = (int*)realloc(parr_2, length * sizeof(int));
+                copyArr(parr_2, parr_1, length);
+                //printArr_p(parr_1, length);
+                //printArr_p(parr_2, length);
+                int firstPositive = -1;
+                findInd(parr_1, length, &firstPositive);
+                if (firstPositive == -1)
+                    printf("There is no Positive numbers in array.\n");
+                else
+                {
+                    start = clock();
+                    sortShell(parr_1, length, firstPositive);
+                    end = clock();
+                    float result1 = (float)(end - start) / CLOCKS_PER_SEC;
+                    printf("\n");
+                    start = clock();
+                    sortBubble(parr_2, length, firstPositive);
+                    end = clock();
+                    float result2 = (float)(end - start) / CLOCKS_PER_SEC;
+                    //printArr_p(parr_1, length);
+                    //printArr_p(parr_2, length);
+                    printf("\nShellSort time(1st Sort):%f\nBubbleSort time(2nd Sort):%f\n", result1, result2);
+                    int percent;
+                    if (result1 < result2)
+                    {
+                        percent = result2 / result1;
+                        printf("ShellSort is about %d times faster than BubbleSort!\n", percent);
+                    }
+                    if (result2 < result1)
+                    {
+                        percent = result1 / result2;
+                        printf("BubbleSort is about %d times faster than ShellSort!\n", percent);
+                        printf("Do you want to rebuild this Task?\n(Press Enter to Restart/Press any other button to Close):\n");
+                        reset(&restart);
+                    }
+                    free(parr_1);
+                    free(parr_2);
+                }
+            }
+        }
+        if (choice == 2)
+        {
+            int** p_arr;
+            p_arr = (int**)malloc(sizeof(int*));
+            while (restart)
+            {
+                printf("Input number of Strings:\n");
+                int str, col;
+                inputLength(&str);
+                printf("Input number of Colums:");
+                inputLength(&col);
+                p_arr = (int**)realloc(p_arr, str * sizeof(int*));
+                for (int i = 0; i < str; i++)
+                    *(p_arr + i) = (int*)malloc(col * sizeof(int));
+                inputArr_pp(p_arr, str, col);
+                printArr_pp(p_arr, str, col);
+                printf("sorted arr:\n");
+                printMultiplication(p_arr, str, col);
+                mergeSort(p_arr, 0, str - 1, col);
+                printArr_pp(p_arr, str, col);
+                printMultiplication(p_arr, str, col);
+                printf("Do you want to rebuild this Task?\n(Press Enter to Restart/Press any other button to Close):\n");
+                reset(&restart);
+            }
+            free(p_arr);
+        }
+        printf("Do you want to restart an app?\n(Press Enter to Restart/Press any other button to Close):\n");
+        reset(&restart);
+    }
+    return 0;
+}

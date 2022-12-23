@@ -1,0 +1,348 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+//#include "Task1Header.h"
+//#include "Task2Header.h"
+//#include "Task3Header.h"
+////////////////////////////////////
+//Task1
+void lengthOfArr1(int* length);
+void randArr1(int* arr, int length);
+void shiftArr1(int* arr, int* length, int i);
+void printArr1(int* arr, int length);
+void evenNumDelete1(int* arr, int* length);
+////////////////////////////////////
+//Task2
+void lengthOfArr2(int* length);
+void reset2(int* reset);
+void inputString2(int** arr, int j);
+void printArr2(int** pparr, int string);
+void min2(int** arr, int string, int* minSum, int* minstring);
+////////////////////////////////////
+//Task3
+void lengthOfArr3(int* length);
+void reset3(int* reset);
+void inputString3(int** arr, int j);
+void printArr3(int** pparr, int string);
+void countOfPositiveNum3(int** arr, int* count, int string);
+////////////////////////////////////
+//Choice
+void choiceOfTask(int* task);
+void restartOrEnd(int* restart);
+int main()
+{
+	int restart = 1;
+	int task;
+	while (restart)
+	{
+		choiceOfTask(&task);
+		if (task == 1)
+		{
+			int length;
+			int* p_length = &length;
+			lengthOfArr1(p_length);
+			int* p_arr = (int*)calloc(length, sizeof(int));
+			randArr1(p_arr, length);
+			printArr1(p_arr, length);
+			evenNumDelete1(p_arr, p_length);
+			p_arr = (int*)realloc(p_arr, length * sizeof(int));
+			printArr1(p_arr, length);
+			free(p_arr);
+		}
+		if (task == 2)
+		{
+			int** pp_arr2;
+			int string;
+			int* p_string = &string;
+			printf("Enter the number of strings:\t");
+			lengthOfArr2(p_string);
+			pp_arr2 = (int**)malloc(string * sizeof(int*));
+			for (int i = 0; i < string; i++)
+			{
+				*(pp_arr2 + i) = (int*)malloc(sizeof(int));
+			}
+			for (int i = 0; i < string; i++)
+			{
+				inputString2(pp_arr2, i);
+			}
+			int minSum;
+			int minstring;
+			printArr2(pp_arr2, string);
+			min2(pp_arr2, string, &minSum, &minstring);
+			printf("Minimal string sum: %d\n", minSum);
+			for (int i = minstring; i < string; i++)
+			{
+				for (int j = 0; j != 0; j++)
+				{
+					*(*(pp_arr2 + i) + j) = *(*(pp_arr2 + i + 1) + j);
+				}
+			}
+			string--;
+			printArr2(pp_arr2, string);
+			for (int i = 0; i < string; i++)
+			{
+				free(*(pp_arr2 + i));
+			}
+			free(pp_arr2);
+		}
+		if (task == 3)
+		{
+			int** pp_arr3;
+			printf("Enter the number of strings:\t");
+			int string;
+			int* pstring = &string;
+			lengthOfArr3(pstring);
+			pp_arr3 = (int**)malloc(string * sizeof(int*));
+			for (int i = 0; i < string; i++)
+			{
+				*(pp_arr3 + i) = (int*)malloc(sizeof(int));
+			}
+			for (int i = 0; i < string; i++)
+			{
+				inputString3(pp_arr3, i);
+			}
+			int sequence;
+			printArr3(pp_arr3, string);
+			countOfPositiveNum3(pp_arr3, &sequence, string);
+			printf("The longest subsequence of positive numbers: %d\n", sequence);
+			for (int i = 0; i < string; i++)
+			{
+				free(*(pp_arr3 + i));
+			}
+			free(pp_arr3);
+		}
+		restartOrEnd(&restart);
+	}
+	return 0;
+}
+////////////////////////////////////
+//Task1
+void lengthOfArr1(int* length)
+{
+	printf("Length of array: \t");
+	while (scanf_s("%d", length) != 1 || *length < 1 || *length > 100 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
+void randArr1(int* arr, int length)
+{
+	srand(time(NULL));
+	for (int i = 0; i < length; i++)
+	{
+		*(arr + i) = rand() % 201 - 100;
+	}
+}
+void evenNumDelete1(int* arr, int* length)
+{
+	for (int i = 0; i < *length; i++)
+		if (*(arr + i) % 2 == 0)
+		{
+			shiftArr1(arr, length, i);
+			i--;
+		}
+}
+void shiftArr1(int* arr, int* length, int j)
+{
+	for (int i = j; i < *length - 1; i++)
+		*(arr + i) = *(arr + i + 1);
+	*length -= 1;
+}
+void printArr1(int* arr, int length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		printf("%d\t", *(arr + i));
+	}
+	printf("\n");
+}
+////////////////////////////////////
+//Task2
+void lengthOfArr2(int* length)
+{
+	while (scanf_s("%d", length) != 1 || *length < 1 || *length > 100 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
+void inputString2(int** arr, int j)
+{
+	int length = 1;
+	int onemore;
+	printf("Input string: \n");
+	for (int i = 0; i < length || length == 100; i++)
+	{
+		while (scanf_s("%d", *(arr + j) + i) != 1 || *(*(arr + j) + i) < 1 || *(*(arr + j) + i) > 100000 || getchar() != '\n')
+		{
+			if (*(*(arr + j) + i) == 0)
+			{
+				break;
+			}
+			else
+			{
+				printf("Error! Try again333.\n");
+				rewind(stdin);
+			}
+		}
+		if (*(*(arr + j) + i) == 0)
+		{
+			break;
+		}
+		else
+		{
+			length += 1;
+			*(arr + j) = (int*)realloc(*(arr + j), length * sizeof(int));
+		}
+	}
+	if (length == 100)
+		printf("It's possible only 100 numbers.\n");
+	length++;
+	*(arr + j) = (int*)realloc(*(arr + j), length * sizeof(int));
+	*(*(arr + j) + length - 1) = 0;
+	system("cls");
+}
+void printArr2(int** arr, int string)
+{
+	for (int i = 0; i < string; i++)
+	{
+		for (int j = 0; *(*(arr + i) + j) != 0; j++)
+		{
+			printf("%d\t", *(*(arr + i) + j));
+		}
+		printf("\n");
+	}
+}
+void min2(int** arr, int string, int* minSum, int* minstring)
+{
+	int min = 0;
+	for (int i = 0; *(*arr + i) != 0; i++)
+	{
+		min += *(*arr + i);
+	}
+	for (int i = 0; i < string; i++)
+	{
+		int sum = 0;
+		for (int j = 0; *(*(arr + i) + j) != 0; j++)
+			sum += *(*(arr + i) + j);
+		if (sum < min)
+		{
+			min = sum;
+			*minstring = i;
+			printf("Minimum String %d\n", *minstring);
+		}
+	}
+	*minSum = min;
+}
+void reset2(int* reset)
+{
+	while (scanf_s("%d", reset) != 1 || *reset != 1 && *reset != 0 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
+////////////////////////////////////
+//Task3
+void lengthOfArr3(int* length)
+{
+	while (scanf_s("%d", length) != 1 || *length < 1 || *length > 100 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
+void inputString3(int** arr, int j)
+{
+	int length = 1;
+	int restart;
+	printf("Input string: \n");
+	for (int i = 0; i < length; i++)
+	{
+		while (scanf_s("%d", *(arr + j) + i) != 1 || *(*(arr + j) + i) == 0 || getchar() != '\n')
+		{
+			if (*(*(arr + j) + i) == 0)
+			{
+				break;
+			}
+			else
+			{
+				printf("Error! Try again333.\n");
+				rewind(stdin);
+			}
+		}
+		if (*(*(arr + j) + i) == 0)
+		{
+			break;
+		}
+		else
+		{
+			length += 1;
+			*(arr + j) = (int*)realloc(*(arr + j), length * sizeof(int));
+		}
+	}
+	length++;
+	*(arr + j) = (int*)realloc(*(arr + j), length * sizeof(int));
+	*(*(arr + j) + length - 1) = 0;
+	system("cls");
+}
+void printArr3(int** arr, int string)
+{
+	for (int i = 0; i < string; i++)
+	{
+		for (int j = 0; *(*(arr + i) + j) != 0; j++)
+		{
+			printf("%d\t", *(*(arr + i) + j));
+		}
+		printf("\n");
+	}
+}
+void countOfPositiveNum3(int** arr, int* count, int string)
+{
+	int maxCount = 0;
+	*count = 0;
+	for (int i = 0; i < string; i++)
+	{
+		for (int j = 0; *(*(arr + i) + j) != 0; j++)
+		{
+			if (*(*(arr + i) + j) > 0)
+				*count += 1;
+			if (*(*(arr + i) + j) < 0)
+				if (maxCount < *count)
+				{
+					maxCount = *count;
+					*count = 0;
+				}
+		}
+	}
+	*count = maxCount;
+}
+void reset3(int* reset)
+{
+	while (scanf_s("%d", reset) != 1 || *reset != 1 && *reset != 0 || getchar() != '\n')
+	{
+		printf("Error! Try again\n");
+		rewind(stdin);
+	}
+}
+////////////////////////////////////
+//Choice
+void choiceOfTask(int* task)
+{
+	printf("Which task would you wnat to start/restart? (1st task - 1, 2nd task - 2, 3rd task - 3): \t");
+	while (scanf_s("%d", task) != 1 || *task != 1 && *task != 2 && *task != 3 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
+void restartOrEnd(int* restart)
+{
+	printf("Do you want to restart programm? (yes - 1, no - 0): \t");
+	while (scanf_s("%d", restart) != 1 || *restart != 1 && *restart != 0 || getchar() != '\n')
+	{
+		printf("Error! Try again.\n");
+		rewind(stdin);
+	}
+}
